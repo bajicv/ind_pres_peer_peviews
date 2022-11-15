@@ -1,0 +1,69 @@
+---
+title: "Peer-Review Results"
+subtitle: "`r params$group` | BreakOut `r params$BreakoutSession` | Presenter `r params$Presenter`"
+output: html_document
+params: 
+  group: "Di"
+  data: "Data_Di_Oral_Presentations_Peer-Review.tsv"
+  BreakoutSession: 1
+  Presenter: 1
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r readin, echo=FALSE, comment=FALSE, message = FALSE, warnings = FALSE}
+
+# libraries  -------------------------------------------------------------------
+library(tidyverse)
+library(knitr)
+
+# data -------------------------------------------------------------------------
+df <- read.delim(params$data, check.names = F, as.is=T, encoding="UTF-8")
+
+dfs <- df %>% 
+  filter(BreakoutSession == params$BreakoutSession, 
+         Presenter == params$Presenter)
+  
+df_tidy <- dfs %>%
+  select(2:21) %>% 
+  pivot_longer(cols=-(1:2), names_to="question", values_to = "grade") %>% 
+  drop_na()
+
+```
+
+```{r plot, echo=FALSE, fig.height = 8}
+
+colors = c("#ca0020", "#f4a582", "#ffffbf", "#92c5de", "#0571b0")
+#names(colors) = levels(as.factor(df_tidy$grade))
+names(colors) = levels(as.factor(1:5))
+
+df_tidy %>% 
+  count(grade, question) %>% 
+  ggplot(aes(stringr::str_wrap(question, 60), n, fill=as.factor(grade))) +
+  geom_bar(stat="identity") +
+  coord_flip() +
+  theme(axis.title.y = element_blank()) +
+  labs(fill="Grade") +
+  #scale_fill_manual(values = c("#ca0020", "#f4a582", "#ffffbf", "#92c5de", "#0571b0"))
+  scale_fill_manual(values = colors)
+
+```
+
+``` {r table1, echo=FALSE, results = 'asis'}
+
+dfs %>% 
+  select(22) %>% 
+  kable()
+
+```
+
+``` {r table2, echo=FALSE, results = 'asis'}
+
+dfs %>% 
+  select(23) %>% 
+  kable()
+
+```
