@@ -13,7 +13,7 @@ to_loop <- df %>%
 
 # loop -------------------------------------------------------------------------
 for (i in 1:nrow(to_loop)) {
-  rmarkdown::render("Di_Peer-Review_Results.Rmd", 
+  rmarkdown::render("Peer-Review_Results.Rmd", 
                     params = list(BreakoutSession = to_loop[i,1],
                                   Presenter = to_loop[i,2],
                                   data = data_file),
