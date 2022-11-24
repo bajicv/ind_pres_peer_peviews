@@ -37,7 +37,6 @@ df_tidy <- dfs %>%
 ```{r plot, echo=FALSE, fig.height = 8}
 
 colors = c("#ca0020", "#f4a582", "#ffffbf", "#92c5de", "#0571b0")
-#names(colors) = levels(as.factor(df_tidy$grade))
 names(colors) = levels(as.factor(1:5))
 
 df_tidy %>% 
@@ -47,7 +46,6 @@ df_tidy %>%
   coord_flip() +
   theme(axis.title.y = element_blank()) +
   labs(fill="Grade") +
-  #scale_fill_manual(values = c("#ca0020", "#f4a582", "#ffffbf", "#92c5de", "#0571b0"))
   scale_fill_manual(values = colors)
 
 ```
